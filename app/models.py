@@ -35,3 +35,14 @@ class D_Type(models.Model):
 
     def __str__(self):
         return f"{self.pk_type}"
+
+
+class D_Geographie(models.Model):
+    pk_geographie = models.CharField(primary_key=True, max_length=30)
+    code_departement = models.CharField(max_length=3)
+    code_region = models.CharField(max_length=3)
+    label_departement = models.CharField(max_length=40)
+    label_region = models.CharField(max_length=3)
+
+    def __str__(self):
+        return f"{self.pk_geographie} - {self.code_departement} - {self.code_region} - {self.label_departement} - {self.label_region}"
