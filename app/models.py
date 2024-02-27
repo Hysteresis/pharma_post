@@ -46,3 +46,15 @@ class D_Geographie(models.Model):
 
     def __str__(self):
         return f"{self.pk_geographie} - {self.code_departement} - {self.code_region} - {self.label_departement} - {self.label_region}"
+
+
+class F_Dose(models.Model):
+    pk_dose = models.CharField(primary_key=True, max_length=255)
+    nb_ucd = models.FloatField()
+    nb_doses = models.FloatField()
+    fk_date = models.ForeignKey(D_Date, on_delete=models.CASCADE)
+    fk_type = models.ForeignKey(D_Type, on_delete=models.CASCADE)
+    fk_geographie = models.ForeignKey(D_Geographie, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.pk_dose} - {self.nb_ucd} - {self.nb_doses}"
