@@ -19,8 +19,7 @@ class EndPointDose(APIView):
     def get(self, request):
         paginator = PageNumberPagination()
         paginator.page_size = 4
-
-        doses = F_Dose.objects.all()
+        doses = F_Dose.objects.all().order_by('fk_date')
         data_F_Dose_page = paginator.paginate_queryset(doses, request)
         data_F_Dose_serializer = FDoseSerializer(data_F_Dose_page, many=True)
         total_doses = F_Dose.objects.aggregate(total_doses=Sum('nb_doses'))['total_doses']
