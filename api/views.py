@@ -12,9 +12,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 # Create your views here.
+
+
 class IsSuperAdmin(IsAdminUser):
     def has_permission(self, request, view):
         return request.user and request.user.is_superuser
+
 
 class EndPointDose(APIView):
     permission_classes = [IsSuperAdmin]
@@ -131,7 +134,7 @@ class Dose_detail(APIView):
 
     def get_queryset(self, table, pk=None):
         """
-        prend en paramètre 'table et 'pk'
+        prend en paramètre 'table
         """
         if table == 'date':
             if pk is not None:
@@ -155,3 +158,6 @@ class Dose_detail(APIView):
                 return F_Dose.objects.all()
         else:
             return None
+
+
+
