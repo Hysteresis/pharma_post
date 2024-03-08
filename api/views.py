@@ -4,6 +4,7 @@ from django.contrib.sites import requests
 from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 
 from app.models import F_Dose, D_Date, D_Type, D_Geographie
 from pharma_post.serializers import FDoseSerializer, DDateSerializer, DTypeSerializer, DGeographieSerializer
@@ -13,7 +14,13 @@ from rest_framework.response import Response
 # Create your views here.
 
 
+class IsSuperAdmin(IsAdminUser):
+    def has_permission(self, request, view):
+        return request.user and request.user.is_superuser
+
+
 class EndPointDose(APIView):
+    permission_classes = [IsSuperAdmin]
     def get(self, request):
         paginator = PageNumberPagination()
         paginator.page_size = 4
@@ -127,7 +134,7 @@ class Dose_detail(APIView):
 
     def get_queryset(self, table, pk=None):
         """
-        prend en paramètre 'table et 'pk'
+        prend en paramètre 'table
         """
         if table == 'date':
             if pk is not None:
@@ -151,3 +158,5 @@ class Dose_detail(APIView):
                 return F_Dose.objects.all()
         else:
             return None
+
+
