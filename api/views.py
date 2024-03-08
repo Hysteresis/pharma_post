@@ -76,6 +76,8 @@ class EndPointDose(APIView):
 class Dose_detail(APIView):
     # http://127.0.0.1:8000/api/detail/?table=dose&pk=2022-11-13-Pfizer-976-6
     # http://127.0.0.1:8000/api/detail/?table=dose
+    permission_classes = [IsSuperAdmin]
+
     def get(self, request, format=None):
         """
         prend en paramèetre d'url 'table' OU 'table' et 'pk'
@@ -158,5 +160,3 @@ class Dose_detail(APIView):
                 return F_Dose.objects.all()
         else:
             return None
-
-
