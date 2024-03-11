@@ -60,31 +60,36 @@ def run():
     data = ODS.objects.all()
 
     doses = []
-
+    i = 0
     with transaction.atomic():
         for item in data:
-            fk_date, _ = D_Date.objects.get_or_create(pk_date=item.date_fin_semaine)
-            fk_type, _ = D_Type.objects.get_or_create(pk_type=item.type_de_vaccin)
+            if item.nb_ucd is not None:  # Vérifiez si nb_ucd n'est pas None
+                i += 1
+                print(item.nb_ucd, i)
+                fk_date, _ = D_Date.objects.get_or_create(pk_date=item.date_fin_semaine)
+                fk_type, _ = D_Type.objects.get_or_create(pk_type=item.type_de_vaccin)
 
-            code_departement = item.code_departement
-            if len(code_departement) == 1:
-                code_departement = f"0{code_departement}"
+                code_departement = item.code_departement
+                if len(code_departement) == 1:
+                    code_departement = f"0{code_departement}"
 
-            pk_geographie = f"{code_departement}-{item.code_region}"
-            fk_geographie, _ = D_Geographie.objects.get_or_create(pk_geographie=pk_geographie)
+                pk_geographie = f"{code_departement}-{item.code_region}"
+                fk_geographie, _ = D_Geographie.objects.get_or_create(pk_geographie=pk_geographie)
 
-            pk_dose = f"{fk_date.pk_date}-{fk_type.pk_type}-{fk_geographie.pk_geographie}"
+                pk_dose = f"{fk_date.pk_date}-{fk_type.pk_type}-{fk_geographie.pk_geographie}"
 
-            if not any(d.pk_dose == pk_dose for d in doses):
-                dose = F_Dose(
-                    pk_dose=pk_dose,
-                    nb_ucd=item.nb_ucd,
-                    nb_doses=item.nb_doses,
-                    fk_date=fk_date,
-                    fk_type=fk_type,
-                    fk_geographie=fk_geographie
-                )
-                print(dose)
-                doses.append(dose)
+                if not any(d.pk_dose == pk_dose for d in doses):
+                    dose = F_Dose(
+                        pk_dose=pk_dose,
+                        nb_ucd=item.nb_ucd,
+                        nb_doses=item.nb_doses,
+                        fk_date=fk_date,
+                        fk_type=fk_type,
+                        fk_geographie=fk_geographie
+                    )
+                    print(dose)
+                    doses.append(dose)
+            else:
+                print("Skipping item with None nb_ucd")
+
         F_Dose.objects.bulk_create(doses)
-

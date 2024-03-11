@@ -20,7 +20,7 @@ class IsSuperAdmin(IsAdminUser):
 
 
 class EndPointDose(APIView):
-    # permission_classes = [IsSuperAdmin]
+    permission_classes = [IsSuperAdmin]
     def get(self, request):
         paginator = PageNumberPagination()
         paginator.page_size = 4
@@ -144,22 +144,22 @@ class Dose_detail(APIView):
         """
         if table == 'date':
             if pk is not None:
-                return D_Date.objects.filter(pk=pk)
+                return D_Date.objects.filter(pk=pk).order_by('pk_date')
             else:
-                return D_Date.objects.all()
+                return D_Date.objects.all().order_by('pk_date')
         elif table == 'type':
             if pk is not None:
-                return D_Type.objects.filter(pk=pk)
+                return D_Type.objects.filter(pk=pk).order_by('pk_type')
             else:
                 return D_Type.objects.all()
         elif table == 'geographie':
             if pk is not None:
-                return D_Geographie.objects.filter(pk=pk)
+                return D_Geographie.objects.filter(pk=pk).order_by('pk_geographie')
             else:
                 return D_Geographie.objects.all()
         elif table == 'dose':
             if pk is not None:
-                return F_Dose.objects.filter(pk=pk)
+                return F_Dose.objects.filter(pk=pk).order_by('pk_dose')
             else:
                 return F_Dose.objects.all()
         else:

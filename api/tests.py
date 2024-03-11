@@ -28,14 +28,11 @@ class MyTestCase(TestCase):
         self.type_moderna = D_Type.objects.create(pk_type="Moderna")
         self.date = D_Date.objects.create(pk_date="2021-06-13")
         self.geographie = D_Geographie.objects.create(pk_geographie="01-84")
-
         type_moderna = D_Type.objects.get(pk_type="Moderna")
         date = D_Date.objects.get(pk_date="2021-06-13")
         geographie = D_Geographie.objects.get(pk_geographie="01-84")
-
         self.dose = F_Dose.objects.create(pk_dose="2021-06-13-AstraZeneca-01-84", nb_ucd=1.0, nb_doses=1.0,
                                           fk_date=date, fk_type=type_moderna, fk_geographie=geographie)
-
         user = User.objects.create_user(username='testUser3', password='12345')
         user.is_superuser = True
         token = Token.objects.create(user=user)
@@ -46,6 +43,7 @@ class MyTestCase(TestCase):
         request = factory.get('/api/')
         force_authenticate(request, user=User)
         response = view(request)
+
         self.assertEqual(response.status_code, 200)
 
     def test_get_type_moderna(self):
@@ -61,7 +59,6 @@ class MyTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_date_detail(self):
-
         table = 'date'
         pk = "2021-06-13"
         factory = APIRequestFactory()
@@ -74,7 +71,6 @@ class MyTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_get_geographie_detail(self):
-
         table = 'geographie'
         pk = "01-84"
         factory = APIRequestFactory()
@@ -86,7 +82,6 @@ class MyTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-
     def test_get_dose_detail(self):
         table = 'dose'
         pk = "2021-06-13-AstraZeneca-01-84"
@@ -96,8 +91,5 @@ class MyTestCase(TestCase):
         request = factory.get(url)
         force_authenticate(request, user=User)
         response = view(request)
-        print("test 5")
-        print(request)
-        print(response)
 
         self.assertEqual(response.status_code, 200)
