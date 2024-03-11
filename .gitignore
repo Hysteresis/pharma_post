@@ -1,5 +1,5 @@
 #Dockerfile
 #docker-compose.yml
 data/
-db.sqlite3
-pharma_post/settings.py
+#db.sqlite3
+#pharma_post/settings.py
