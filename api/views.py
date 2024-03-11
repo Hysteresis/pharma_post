@@ -20,7 +20,7 @@ class IsSuperAdmin(IsAdminUser):
 
 
 class EndPointDose(APIView):
-    permission_classes = [IsSuperAdmin]
+    # permission_classes = [IsSuperAdmin]
     def get(self, request):
         paginator = PageNumberPagination()
         paginator.page_size = 4
@@ -77,8 +77,8 @@ class Dose_detail(APIView):
     # http://127.0.0.1:8000/api/detail/?table=dose&pk=2022-11-13-Pfizer-976-6
     # http://127.0.0.1:8000/api/detail/?table=dose
     # permission_classes = [IsSuperAdmin]
-
-    def get(self, request, format=None):
+    # def get(self, request, format=None):
+    def get(self, request):
         """
         prend en paramèetre d'url 'table' OU 'table' et 'pk'
 
@@ -100,21 +100,21 @@ class Dose_detail(APIView):
             return Response({'message': 'Table ou clé primaire invalide'}, status=status.HTTP_400_BAD_REQUEST)
 
         nombre_de_lignes = queryset.count()
-        # paginator = PageNumberPagination()
-        # paginator.page_size = 25
-        # paginated_queryset = paginator.paginate_queryset(queryset, request)
+        paginator = PageNumberPagination()
+        paginator.page_size = 25
+        paginated_queryset = paginator.paginate_queryset(queryset, request)
 
-        # serializer = serializer_class(paginated_queryset, many=True)
-        serializer = serializer_class(queryset, many=True)
+        serializer = serializer_class(paginated_queryset, many=True)
+        # serializer = serializer_class(queryset, many=True)
         result = {
             'home': 'http://localhost:8000/admin',
             'nombre_de_lignes': nombre_de_lignes,
             'nom_de_table': table,
-            'status OK': 'ok',
+            'status OK': status.HTTP_200_OK,
             'data': serializer.data,
 
-            # 'next': paginator.get_next_link(),
-            # 'previous': paginator.get_previous_link()
+            'next': paginator.get_next_link(),
+            'previous': paginator.get_previous_link()
         }
         print("ok = 200")
         return Response(result, status=status.HTTP_200_OK)

@@ -50,15 +50,15 @@ class MyTestCase(TestCase):
         pk = "Moderna"
         factory = APIRequestFactory()
         my_dict = {'get': 'retrieve'}
-        view = Dose_detail.as_view(actions=my_dict)
-
+        # view = Dose_detail.as_view(actions=my_dict)
+        view = Dose_detail.as_view()
+        request = factory.get(reverse("dose_detail"), {'table': table, 'pk': pk})
         # request = factory.get(reverse("dose_detail"), {'table': table})
-        request = factory.get(reverse("dose_detail"), {'table': table})
         print(request)
         # force_authenticate(request, user=user)
 
         type_response = view(request)
-        print(type_response)
+        print(type_response.data)
 
 
         self.assertEqual(type_response.status_code, 200)
