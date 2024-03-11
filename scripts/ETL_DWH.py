@@ -63,7 +63,7 @@ def run():
     i = 0
     with transaction.atomic():
         for item in data:
-            if item.nb_ucd is not None:  # Vérifiez si nb_ucd n'est pas None
+            if item.nb_ucd is not None:
                 i += 1
                 print(item.nb_ucd, i)
                 fk_date, _ = D_Date.objects.get_or_create(pk_date=item.date_fin_semaine)

@@ -23,7 +23,7 @@ class EndPointDose(APIView):
     permission_classes = [IsSuperAdmin]
     def get(self, request):
         paginator = PageNumberPagination()
-        paginator.page_size = 4
+        paginator.page_size = 10
         doses = F_Dose.objects.all().order_by('fk_date')
         data_F_Dose_page = paginator.paginate_queryset(doses, request)
         data_F_Dose_serializer = FDoseSerializer(data_F_Dose_page, many=True)
@@ -101,7 +101,7 @@ class Dose_detail(APIView):
 
         nombre_de_lignes = queryset.count()
         paginator = PageNumberPagination()
-        paginator.page_size = 25
+        paginator.page_size = 10
         paginated_queryset = paginator.paginate_queryset(queryset, request)
 
         serializer = serializer_class(paginated_queryset, many=True)
