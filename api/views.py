@@ -76,7 +76,7 @@ class EndPointDose(APIView):
 class Dose_detail(APIView):
     # http://127.0.0.1:8000/api/detail/?table=dose&pk=2022-11-13-Pfizer-976-6
     # http://127.0.0.1:8000/api/detail/?table=dose
-    # permission_classes = [IsSuperAdmin]
+    permission_classes = [IsSuperAdmin]
     # def get(self, request, format=None):
     def get(self, request):
         """
@@ -94,7 +94,7 @@ class Dose_detail(APIView):
             serializer_class = self.get_serializer(table)
         else:
             queryset = self.get_queryset(table, pk)
-            serializer_class = self.get_serializer()
+            serializer_class = self.get_serializer(table)
 
         if not queryset or not serializer_class:
             return Response({'message': 'Table ou clé primaire invalide'}, status=status.HTTP_400_BAD_REQUEST)
@@ -144,7 +144,7 @@ class Dose_detail(APIView):
         """
         if table == 'date':
             if pk is not None:
-                return D_Date.objects.filter(date=pk)
+                return D_Date.objects.filter(pk=pk)
             else:
                 return D_Date.objects.all()
         elif table == 'type':

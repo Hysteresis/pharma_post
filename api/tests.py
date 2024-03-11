@@ -17,48 +17,87 @@ from rest_framework.views import APIView
 
 import json
 
-from app.models import D_Type
+from app.models import D_Type, D_Date, D_Geographie, F_Dose
 
 
 # Create your tests here.
 
 
 class MyTestCase(TestCase):
+    def setUp(self):
+        self.type_moderna = D_Type.objects.create(pk_type="Moderna")
+        self.date = D_Date.objects.create(pk_date="2021-06-13")
+        self.geographie = D_Geographie.objects.create(pk_geographie="01-84")
 
-    # def test_get_user(self):
-    #     user = User.objects.create_user(username='testUser1', password='12345')
-    #     # user.save()
-    #     user.is_superuser = True
-    #     token = Token.objects.create(user=user)
-    #     print(token)
-    #     factory = APIRequestFactory()
-    #     view = EndPointDose.as_view()
-    #     request = factory.get('/api/')
-    #     force_authenticate(request, user=user)
-    #     response = view(request)
-    #     print(f"Methode 1 ===> response sur API/ : {response}")
-    #     self.assertEqual(response.status_code, 200)
+        type_moderna = D_Type.objects.get(pk_type="Moderna")
+        date = D_Date.objects.get(pk_date="2021-06-13")
+        geographie = D_Geographie.objects.get(pk_geographie="01-84")
 
-    def test_get_type_detail(self):
-        # user = User.objects.create_user(username='testUser2', password='12345')
-        # print(user)
-        # user.is_superuser = True
-        # token = Token.objects.create(user=user)
-        # print(token.key)
+        self.dose = F_Dose.objects.create(pk_dose="2021-06-13-AstraZeneca-01-84", nb_ucd=1.0, nb_doses=1.0,
+                                          fk_date=date, fk_type=type_moderna, fk_geographie=geographie)
 
+        user = User.objects.create_user(username='testUser3', password='12345')
+        user.is_superuser = True
+        token = Token.objects.create(user=user)
+
+    def test_get_user(self):
+        factory = APIRequestFactory()
+        view = EndPointDose.as_view()
+        request = factory.get('/api/')
+        force_authenticate(request, user=User)
+        response = view(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_type_moderna(self):
         table = 'type'
         pk = "Moderna"
         factory = APIRequestFactory()
-        my_dict = {'get': 'retrieve'}
-        # view = Dose_detail.as_view(actions=my_dict)
         view = Dose_detail.as_view()
-        request = factory.get(reverse("dose_detail"), {'table': table, 'pk': pk})
-        # request = factory.get(reverse("dose_detail"), {'table': table})
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_date_detail(self):
+
+        table = 'date'
+        pk = "2021-06-13"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_geographie_detail(self):
+
+        table = 'geographie'
+        pk = "01-84"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_get_dose_detail(self):
+        table = 'dose'
+        pk = "2021-06-13-AstraZeneca-01-84"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+        print("test 5")
         print(request)
-        # force_authenticate(request, user=user)
+        print(response)
 
-        type_response = view(request)
-        print(type_response.data)
-
-
-        self.assertEqual(type_response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
