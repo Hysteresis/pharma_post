@@ -15,7 +15,16 @@
 <div class="container ">
     <div class="row" >
     <h1>Liste des dates</h1>
+    <form method="GET" action="{% url 'find_next_date' %}">
+        <label for="current_date">Saisissez une date :</label>
+        <input type="date" id="current_date" name="current_date">
+        <button type="submit">Trouver la date</button>
+    </form>
+
     <ul>
+<!--        http://127.0.0.1:8000/api/detail/?page=18&table=dose-->
+<!--        http://127.0.0.1:8000/admin/app/f_dose/?p=9-->
+<!--        2022-10-16-Pfizer-63-84 - 801.0 - 4806.0-->
         {% for date in dates %}
             <li>{{ date }}</li>
         {% endfor %}

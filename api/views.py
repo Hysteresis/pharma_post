@@ -102,7 +102,7 @@ class Dose_detail(APIView):
 
         nombre_de_lignes = queryset.count()
         paginator = PageNumberPagination()
-        paginator.page_size = 10
+        paginator.page_size = 100
         paginated_queryset = paginator.paginate_queryset(queryset, request)
 
         serializer = serializer_class(paginated_queryset, many=True)
