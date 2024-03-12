@@ -23,13 +23,14 @@ class EndPointDose(APIView):
     permission_classes = [IsSuperAdmin]
     def get(self, request):
         paginator = PageNumberPagination()
-        paginator.page_size = 4
+        paginator.page_size = 10
         doses = F_Dose.objects.all().order_by('fk_date')
         data_F_Dose_page = paginator.paginate_queryset(doses, request)
         data_F_Dose_serializer = FDoseSerializer(data_F_Dose_page, many=True)
         total_doses = F_Dose.objects.aggregate(total_doses=Sum('nb_doses'))['total_doses']
 
         data = {
+            'home': 'http://localhost:8000/',
             'num_doses': doses.count(),
             'total_doses': total_doses,
             'data_F_Dose': data_F_Dose_serializer.data,
@@ -77,8 +78,8 @@ class Dose_detail(APIView):
     # http://127.0.0.1:8000/api/detail/?table=dose&pk=2022-11-13-Pfizer-976-6
     # http://127.0.0.1:8000/api/detail/?table=dose
     permission_classes = [IsSuperAdmin]
-
-    def get(self, request, format=None):
+    # def get(self, request, format=None):
+    def get(self, request):
         """
         prend en paramèetre d'url 'table' OU 'table' et 'pk'
 
@@ -94,25 +95,29 @@ class Dose_detail(APIView):
             serializer_class = self.get_serializer(table)
         else:
             queryset = self.get_queryset(table, pk)
-            serializer_class = self.get_serializer()
+            serializer_class = self.get_serializer(table)
 
         if not queryset or not serializer_class:
             return Response({'message': 'Table ou clé primaire invalide'}, status=status.HTTP_400_BAD_REQUEST)
 
         nombre_de_lignes = queryset.count()
         paginator = PageNumberPagination()
-        paginator.page_size = 25
+        paginator.page_size = 10
         paginated_queryset = paginator.paginate_queryset(queryset, request)
 
         serializer = serializer_class(paginated_queryset, many=True)
+        # serializer = serializer_class(queryset, many=True)
         result = {
-            'home': 'http://localhost:8000/admin',
+            'home': 'http://localhost:8000/',
             'nombre_de_lignes': nombre_de_lignes,
             'nom_de_table': table,
+            'status OK': status.HTTP_200_OK,
             'data': serializer.data,
+
             'next': paginator.get_next_link(),
             'previous': paginator.get_previous_link()
         }
+        print("ok = 200")
         return Response(result, status=status.HTTP_200_OK)
 
     def get_serializer(self, table=None):
@@ -140,22 +145,22 @@ class Dose_detail(APIView):
         """
         if table == 'date':
             if pk is not None:
-                return D_Date.objects.filter(date=pk)
+                return D_Date.objects.filter(pk=pk).order_by('pk_date')
             else:
-                return D_Date.objects.all()
+                return D_Date.objects.all().order_by('pk_date')
         elif table == 'type':
             if pk is not None:
-                return D_Type.objects.filter(pk=pk)
+                return D_Type.objects.filter(pk=pk).order_by('pk_type')
             else:
                 return D_Type.objects.all()
         elif table == 'geographie':
             if pk is not None:
-                return D_Geographie.objects.filter(pk=pk)
+                return D_Geographie.objects.filter(pk=pk).order_by('pk_geographie')
             else:
                 return D_Geographie.objects.all()
         elif table == 'dose':
             if pk is not None:
-                return F_Dose.objects.filter(pk=pk)
+                return F_Dose.objects.filter(pk=pk).order_by('pk_dose')
             else:
                 return F_Dose.objects.all()
         else:

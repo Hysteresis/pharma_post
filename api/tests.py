@@ -4,85 +4,92 @@ from datetime import date
 
 from django.test import TestCase
 
-from rest_framework.test import APIRequestFactory
-from api.views import EndPointDose
+from rest_framework.test import APIRequestFactory, force_authenticate, APIClient
+from api.views import EndPointDose, Dose_detail
+from django.contrib.auth.models import User, Permission
+from rest_framework.authtoken.models import Token
+from rest_framework.test import force_authenticate
+from django.urls import reverse
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 import json
+
+from app.models import D_Type, D_Date, D_Geographie, F_Dose
 
 
 # Create your tests here.
-factory = APIRequestFactory()
-
-view = EndPointDose.as_view()
-request = factory.get('api/')
-
-first_line_view = view(request)
-first_line_view.render()
-first_line_response = json.loads(first_line_view.content)
-
 
 
 class MyTestCase(TestCase):
-    def test_get_data(self):
-        data = {
-                "count": 33212
-        }
+    def setUp(self):
+        self.type_moderna = D_Type.objects.create(pk_type="Moderna")
+        self.date = D_Date.objects.create(pk_date="2021-06-13")
+        self.geographie = D_Geographie.objects.create(pk_geographie="01-84")
+        type_moderna = D_Type.objects.get(pk_type="Moderna")
+        date = D_Date.objects.get(pk_date="2021-06-13")
+        geographie = D_Geographie.objects.get(pk_geographie="01-84")
+        self.dose = F_Dose.objects.create(pk_dose="2021-06-13-AstraZeneca-01-84", nb_ucd=1.0, nb_doses=1.0,
+                                          fk_date=date, fk_type=type_moderna, fk_geographie=geographie)
+        user = User.objects.create_user(username='testUser3', password='12345')
+        user.is_superuser = True
+        token = Token.objects.create(user=user)
 
-        self.assertIn(first_line_response, data)
+    def test_get_user(self):
+        factory = APIRequestFactory()
+        view = EndPointDose.as_view()
+        request = factory.get('/api/')
+        force_authenticate(request, user=User)
+        response = view(request)
 
+        self.assertEqual(response.status_code, 200)
 
-    # def test_my_view(self):
-    #     factory = APIRequestFactory()
-    #     request = factory.get('')
-    #     view = EndPointDose.as_view()
-    #     response = view(request)
-    #     response.render()
-    #     json_response = json.loads(response.content)
-    #     # json_str = json.dumps(json_response)
-    #     # print(json_str[:100])
-    #     self.assertEqual(response.status_code, 200)
-    #
-    # def test_json_response_contains_expected_fields(self):
-    #     factory = APIRequestFactory()
-    #     request = factory.get('api/')
-    #     view = EndPointDose.as_view()
-    #     response = view(request)
-    #     response.render()
-    #     json_response = json.loads(response.content)
-    #
-    #     self.assertIn('count', json_response)
-    #     self.assertIn('num_doses', json_response['results'])
-    #     self.assertIn('total_doses', json_response['results'])
-    #     self.assertIn('data_F_Dose', json_response['results'])
-    #
-    # def test_data_F_Dose_contains_items(self):
-    #     factory = APIRequestFactory()
-    #     request = factory.get('api/')
-    #     view = EndPointDose.as_view()
-    #     response = view(request)
-    #     response.render()
-    #     json_response = json.loads(response.content)
-    #
-    #     self.assertIn('data_F_Dose', json_response['results'])
-    #
-    #     for item in json_response['results']['data_F_Dose']:
-    #         print(f"test : {item['pk_dose']}")
-    #         self.assertIn('pk_dose', item)
-    #
-    # def test_count(self):
-    #     factory = APIRequestFactory()
-    #     request = factory.get('api/')
-    #
-    #     view = EndPointDose.as_view()
-    #     response = view(request)
-    #     response.render()
-    #     json_response = json.loads(response.content)
-    #     json_str = json.dumps(json_response)
-    #     print(json_str[:100])
-    #     count_value = json_response['count']
-    #     print("Valeur de count:", count_value)
-        # count_response = json_response['count']
-        # print("count = ")
-        # print(count_response)
-        # total_doses_calculation = sum(item['nb_doses'] for item in json_response['results']['data_F_Dose'])
-        #
-        # self.assertEqual(total_doses_response, total_doses_calculation)
+    def test_get_type_moderna(self):
+        table = 'type'
+        pk = "Moderna"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_date_detail(self):
+        table = 'date'
+        pk = "2021-06-13"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_geographie_detail(self):
+        table = 'geographie'
+        pk = "01-84"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_dose_detail(self):
+        table = 'dose'
+        pk = "2021-06-13-AstraZeneca-01-84"
+        factory = APIRequestFactory()
+        view = Dose_detail.as_view()
+        url = reverse("dose_detail") + f'?table={table}&pk={pk}'
+        request = factory.get(url)
+        force_authenticate(request, user=User)
+        response = view(request)
+
+        self.assertEqual(response.status_code, 200)

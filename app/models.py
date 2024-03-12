@@ -12,8 +12,8 @@ class ODS(models.Model):
     libelle_departement = models.CharField(max_length=255)
     date_fin_semaine = models.DateField()
     type_de_vaccin = models.CharField(max_length=100)
-    nb_ucd = models.FloatField()
-    nb_doses = models.FloatField()
+    nb_ucd = models.FloatField(null=True, blank=True)
+    nb_doses = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return (
@@ -50,8 +50,8 @@ class D_Geographie(models.Model):
 
 class F_Dose(models.Model):
     pk_dose = models.CharField(primary_key=True, max_length=255)
-    nb_ucd = models.FloatField()
-    nb_doses = models.FloatField()
+    nb_ucd = models.FloatField(null=True, blank=True)
+    nb_doses = models.FloatField(null=True, blank=True)
     fk_date = models.ForeignKey(D_Date, on_delete=models.CASCADE)
     fk_type = models.ForeignKey(D_Type, on_delete=models.CASCADE)
     fk_geographie = models.ForeignKey(D_Geographie, on_delete=models.CASCADE)
