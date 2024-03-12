@@ -12,46 +12,43 @@
 
 {% include 'navbar.html' %}
 
-<div class="container ">
-    <div class="row" >
-    <h1>Toutes les dates</h1>
-    <form method="GET" action="{% url 'find_next_date' %}">
-        <label for="current_date">Saisissez une date :</label>
-        <input type="date" id="current_date" name="current_date">
-        <button type="submit">Trouver la date</button>
-    </form>
+<div class="container overlay-date ">
+    <div class="row p-5 text-white mt-4 justify-content-center " >
+        <div class="col-6 bg-success py-2" >
+                <h1 class="text-white text-center">Toutes les dates</h1>
+                <hr>
+                <form method="GET" action="{% url 'find_next_date' %}">
+                    <label for="current_date"  class="form-label fs-4 text-white">Saisissez une date :</label>
+                    <input type="date"  class="form-control mt-3" id="current_date" name="current_date">
+                    <div class="text-center">
+                        <button type="submit"  class="btn btn-danger mt-3">Trouver la date</button>
+                    </div>
+                </form>
 
-    <ul>
-<!--        http://127.0.0.1:8000/api/detail/?page=18&table=dose-->
-<!--        http://127.0.0.1:8000/admin/app/f_dose/?p=9-->
-<!--        2022-10-16-Pfizer-63-84 - 801.0 - 4806.0-->
-        {% for date in dates %}
-            <li>{{ date }}</li>
-        {% endfor %}
-    </ul>
+    <!--            <ul>-->
+    <!--                {% for date in dates %}-->
+    <!--                    <li>{{ date }}</li>-->
+    <!--                {% endfor %}-->
+    <!--            </ul>-->
 
-    {% if dates.has_other_pages %}
-        <div class="pagination">
-            {% if dates.has_previous %}
-                <a href="?page=1">Première page</a>
-                <a href="?page={{ dates.previous_page_number }}">Page précédente</a>
-            {% endif %}
-            <span class="current">
-                Page {{ dates.number }} de {{ dates.paginator.num_pages }}.
-            </span>
-            {% if dates.has_next %}
-                <a href="?page={{ dates.next_page_number }}">Page suivante</a>
-                <a href="?page={{ dates.paginator.num_pages }}">Dernière page</a>
-            {% endif %}
+    <!--            {% if dates.has_other_pages %}-->
+    <!--                <div class="pagination">-->
+    <!--                    {% if dates.has_previous %}-->
+    <!--                        <a href="?page=1">Première page</a>-->
+    <!--                        <a href="?page={{ dates.previous_page_number }}">Page précédente</a>-->
+    <!--                    {% endif %}-->
+    <!--                    <span class="current">-->
+    <!--                        Page {{ dates.number }} de {{ dates.paginator.num_pages }}.-->
+    <!--                    </span>-->
+    <!--                    {% if dates.has_next %}-->
+    <!--                        <a href="?page={{ dates.next_page_number }}">Page suivante</a>-->
+    <!--                        <a href="?page={{ dates.paginator.num_pages }}">Dernière page</a>-->
+    <!--                    {% endif %}-->
+    <!--                </div>-->
+    <!--            {% endif %}-->
         </div>
-    {% endif %}
-
     </div>
-
-
 </div>
-
-
 
 </body>
 </html>

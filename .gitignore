@@ -2,5 +2,6 @@
 #docker-compose.yml
 data/
 static/video/
+static/img
 #db.sqlite3
 #pharma_post/settings.py

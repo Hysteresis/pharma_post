@@ -14,24 +14,19 @@
 
 {% include 'navbar.html' %}
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-              <img src="..." class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Total des doses</h5>
-                  <h5 class="card-title">{{ next_date.pk_date }}</h5>
-              {% if total_doses_for_next_date is not None %}
-                  <hr>
-                  <p class="card-text">Puy de Dôme (63)</p>
-                  <p class="card-text fs-1">{{ total_doses_for_next_date }}</p>
-                {% else %}
-                <p class="card-text">Erreur : Aucune dose trouvée.</p>
-            {% endif %}
-<!--                  <a href="#" class="btn btn-primary">Go somewhere</a>-->
-              </div>
-            </div>
+<div class="container overlay-date ">
+    <div class="row p-5 text-white mt-4 justify-content-center">
+        <div class="col-6 bg-success justify-content-center text-center py-2">
+                    <h3 class="card-title py-2">Total des doses</h3>
+                      <h5 class="card-title pb-2">{{ next_date.pk_date }}</h5>
+                  {% if total_doses_for_next_date is not None %}
+                      <hr>
+                      <p class="card-text pt-2">Puy de Dôme (63)</p>
+                      <p class="card-text fs-1 pb-2">{{ total_doses_for_next_date }}</p>
+                    {% else %}
+                    <p class="card-text">Erreur : Aucune dose trouvée.</p>
+                {% endif %}
+
 
         </div>
 
