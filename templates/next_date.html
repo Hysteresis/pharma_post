@@ -16,12 +16,25 @@
 
 <div class="container">
     <div class="row">
-        <h1>Date de fin de semaine : {{ next_date.pk_date }}</h1>
-        {% if total_doses_for_next_date is not None %}
-            <p>Total des doses pour la date suivante avec la clé de géographie commençant par "63": {{ total_doses_for_next_date }}</p>
-        {% else %}
-            <p>Aucune dose disponible pour la date suivante avec la clé de géographie commençant par "63".</p>
-        {% endif %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+              <img src="..." class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Total des doses</h5>
+                  <h5 class="card-title">{{ next_date.pk_date }}</h5>
+              {% if total_doses_for_next_date is not None %}
+                  <hr>
+                  <p class="card-text">Puy de Dôme (63)</p>
+                  <p class="card-text fs-1">{{ total_doses_for_next_date }}</p>
+                {% else %}
+                <p class="card-text">Erreur : Aucune dose trouvée.</p>
+            {% endif %}
+<!--                  <a href="#" class="btn btn-primary">Go somewhere</a>-->
+              </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 

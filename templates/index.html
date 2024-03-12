@@ -12,16 +12,70 @@
 
 {% include 'navbar.html' %}
 
-<div class="container-fluid ">
-    <div class="row w-100" >
-        <video width="100%" height="100%" muted autoplay loop>
-            <source src="{% static 'video/cornonavirus.mp4' %}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+<div class="container-fluid position-relative">
+    <div class="row smoked">
+        <div class="col-12 p-0">
+            <video class="w-100" muted autoplay loop>
+                <source src="{% static 'video/cornonavirus.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+        </div>
+    </div>
+    <div class="row justify-content-center position-absolute top-50 start-50 translate-middle overlay-smoked">
+        <div class="col-md-4 py-5 px-2">
+            <div class="card h-100 bg-blue-transparent">
+                  <div class="card-header">
+                    <h5 class="card-title text-center">API</h5>
+                  </div>
+                <div class="card-body">
+                    <p class="card-text">Accédez aux données de l'API de data.gouv.fr pour obtenir des informations sur l'épidémie de COVID-19.</p>
+
+                    <p>
+                        Les données brutes sont :
+                        <a href="https://explore.data.gouv.fr/fr/tableau?url=https%3A%2F%2Fwww.data.gouv.fr%2Ffr%2Fdatasets%2Fr%2F5c4e1452-3850-4b59-b11c-3dd51d7fb8b5" target="_blank" style="text-decoration: underline; font-weight: bold; color: inherit;">ici</a>
+
+                    </p>
+                </div>
+                  <div class="card-footer text-muted text-center">
+                    <a href="{% url 'endpoint' %}" class="btn btn-danger">Go API</a>
+                  </div>
+            </div>
+        </div>
+        <div class="col-md-4 py-5 px-2">
+            <div class="card h-100 bg-blue-transparent">
+                  <div class="card-header">
+                    <h5 class="card-title text-center">Date</h5>
+                  </div>
+                <div class="card-body">
+                    <p class="card-text">Utilisez cette fonctionnalité pour sélectionner une date spécifique et obtenir le nombre de doses de vaccins reçus ce jour-là. </p>
+                    <p>
+                        Suivez l'évolution des doses au fil du temps
+                    </p>
+                </div>
+              <div class="card-footer text-muted text-center">
+                    <a href="{% url 'date' %}" class="btn btn-danger">Go Date</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 py-5 px-2">
+            <div class="card h-100 bg-blue-transparent">
+                  <div class="card-header">
+                    <h5 class="card-title text-center">Les laboratoires</h5>
+                  </div>
+                <div class="card-body">
+                    <p class="card-text">Découvrez les laboratoires impliqués dans la production et la distribution des vaccins COVID-19.</p>
+                    <p>AstraZeneca, Pfizer,Moderna et autres...</p>
+                </div>
+                  <div class="card-footer text-muted text-center">
+                    <a href="{% url 'dose_detail' %}?table=type" class="btn btn-danger">Go Laboratoires</a>
+                  </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
-
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
