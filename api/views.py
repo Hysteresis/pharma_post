@@ -30,6 +30,7 @@ class EndPointDose(APIView):
         total_doses = F_Dose.objects.aggregate(total_doses=Sum('nb_doses'))['total_doses']
 
         data = {
+            'home': 'http://localhost:8000/',
             'num_doses': doses.count(),
             'total_doses': total_doses,
             'data_F_Dose': data_F_Dose_serializer.data,
@@ -107,7 +108,7 @@ class Dose_detail(APIView):
         serializer = serializer_class(paginated_queryset, many=True)
         # serializer = serializer_class(queryset, many=True)
         result = {
-            'home': 'http://localhost:8000/admin',
+            'home': 'http://localhost:8000/',
             'nombre_de_lignes': nombre_de_lignes,
             'nom_de_table': table,
             'status OK': status.HTTP_200_OK,
